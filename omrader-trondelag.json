@@ -1,0 +1,62 @@
+{
+  "documents": [
+    {
+      "_id": "52408144e7926dcf15000001",
+      "navn": "Tr\u00f8ndelag",
+      "tilbyder": "DNT",
+      "endret": "2014-06-01T16:45:54.679Z",
+      "lisens": "CC BY-NC 4.0",
+      "status": "Offentlig"
+    },
+    {
+      "_id": "52408144e7926dcf1500002e",
+      "lisens": "CC BY-NC 4.0",
+      "navn": "Orkelsj\u00f8vidda, Budal og Forollhogna",
+      "status": "Offentlig",
+      "endret": "2014-06-01T16:46:36.911Z",
+      "tilbyder": "DNT"
+    },
+    {
+      "_id": "52408144e7926dcf1500001b",
+      "lisens": "CC BY-NC 4.0",
+      "endret": "2015-05-20T19:29:35.105Z",
+      "tilbyder": "DNT",
+      "status": "Offentlig",
+      "navn": "Dovrefjell"
+    },
+    {
+      "_id": "52408144e7926dcf1500004f",
+      "lisens": "CC BY-NC 4.0",
+      "navn": "Fosenhalv\u00f8ya",
+      "tilbyder": "DNT",
+      "status": "Offentlig",
+      "endret": "2015-05-20T19:31:45.021Z"
+    },
+    {
+      "_id": "52408144e7926dcf1500001d",
+      "status": "Offentlig",
+      "tilbyder": "DNT",
+      "lisens": "CC BY-NC 4.0",
+      "navn": "Sylan \/ Bealjehkh",
+      "endret": "2015-05-20T19:51:20.153Z"
+    },
+    {
+      "_id": "52408144e7926dcf1500001f",
+      "lisens": "CC BY-NC 4.0",
+      "endret": "2015-05-20T19:53:30.583Z",
+      "status": "Offentlig",
+      "navn": "Trondheimsmarka",
+      "tilbyder": "DNT"
+    },
+    {
+      "_id": "52408144e7926dcf15000006",
+      "status": "Offentlig",
+      "navn": "Trollheimen",
+      "endret": "2015-07-03T17:50:32.690Z",
+      "tilbyder": "DNT",
+      "lisens": "CC BY-SA 4.0"
+    }
+  ],
+  "count": 7,
+  "total": 7
+}

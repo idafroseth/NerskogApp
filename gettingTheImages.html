@@ -1,0 +1,109 @@
+<html>
+	<head>
+
+	</head>
+	<body>
+
+		<script type="text/javascript" src="idListOfTrips.json"></script>
+	 
+		<script type="text/javascript" src="imageListOfTrips.json"></script>
+		 
+		<script type="text/javascript" src="shortListOfTrips.json"></script>
+	 	<h1>Images Found</h1>
+		<div class="code" id="imageListDiv"></div>
+		<h1>Images Not Found</h1>
+		<div class="code" id="imagesNotFound"></div>
+		<h1>Id List of trips</h1>
+		<div class="code"  id="validTripsAndImg"></div>
+	
+
+		<script>
+			var baseUrl = 'https://api.nasjonalturbase.no/';
+			var validTripsAndImg = document.getElementById('validTripsAndImg');
+			var imagesFoundDiv = document.getElementById('imageListDiv');
+			var imagesNotFoundDiv = document.getElementById('imagesNotFound');
+
+			var imagesFound = {};
+			var imagesNotFound = [];
+			function getImages(){
+				alert(Object.keys(completeTrips).length);
+				Object.keys(completeTrips).forEach(function(tripId){
+					var trip = completeTrips[tripId];
+					trip.bilder.forEach(function(bilde){
+						getOneImage(bilde,tripId);
+					});
+				});
+
+			}
+
+			function getOneImage(image, tripId){
+				var indexOfImage;
+				if(image._id){
+					imagesFound[image._id]=image;
+					indexOfImage = completeTrips[tripId].bilder.indexOf(image._id);
+					imagesFoundDiv.innerHTML = JSON.stringify(imagesFound);
+					console.log("Existing: "+image._id);
+				}
+				else{
+					indexOfImage = completeTrips[tripId].bilder.indexOf(image);
+					var url = baseUrl+'bilder/'+image ;
+					var xhr = new createCORSRequest('get',url);
+					xhr.setRequestHeader("Content-type", "application/json");
+					console.log("Trying to find image with id: " + image);
+					xhr.onreadystatechange = function () { 
+						    if (xhr.readyState == 4 ){
+						    	if(xhr.status == 200) {
+						    		console.log("Found: " + image);
+							    	var bilde = JSON.parse(xhr.responseText);
+							    	imageList.push(bilde);
+							    	//got image
+							        completeTrips[trip._id] = trip;
+							        validTripsAndImg.innerHTML = JSON.stringify(completeTrips);
+							        imagesFound.push(bilde._id);
+							        imagesFoundDiv.innerHTML = JSON.stringify(imagesFound);
+						
+							    	
+							    }
+						    	else{
+						    		console.log("ERROR: " + image);
+							    	imagesNotFound.push(image);
+							    	imagesNotFoundDiv.innerHTML = JSON.stringify(imagesNotFound);
+						    	}
+						}
+					}
+					xhr.send();
+
+				}
+				//Delete image from trip
+		    	
+		    	if(indexOfImage!=-1){
+		    		completeTrips[tripId].bilder.splice(indexOfImage, 1);
+		    	}
+		    	validTripsAndImg.innerHTML = JSON.stringify(completeTrips);
+
+			}
+
+			document.onload = getImages();
+
+
+        function createCORSRequest(method, url){
+         var xhr = new XMLHttpRequest();
+          if ("withCredentials" in xhr) {
+            // XHR for Chrome/Firefox/Opera/Safari.
+            xhr.open(method, url, true);
+          } else if (typeof XDomainRequest != "undefined") {
+            // XDomainRequest for IE.
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+          } else {
+            // CORS not supported.
+            alert("CORS not supported");
+            xhr = null;
+          }
+          return xhr;
+        }
+
+		</script>
+
+	</body>
+</html>

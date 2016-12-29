@@ -1,0 +1,202 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <!-- Required meta tags always come first -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta http-equiv="x-ua-compatible" content="ie=edge">
+
+	<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel="stylesheet" />
+	<!--link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0-alpha.5/css/bootstrap.min.css" integrity="sha384-AysaV+vQoT3kOAXZkl02PThvDr8HYKPZhNT5h/CXfBThSRXQ6jW5DO2ekP5ViFdi" crossorigin="anonymous"-->
+
+ 	<link rel="stylesheet" href="./style.css">
+	<title>Turer i Rennebu</title>
+	<style>
+		/* Optional: Makes the sample page fill the window. */
+	      html, body {
+	        height: 100%;
+	        margin: 0;
+	        padding: 0;
+	        overflow: hidden;
+	      }
+	      .bottom-sheet{
+	      	background: rgb(0, 0, 0);
+	      	background: rgba(0, 0, 0, 0.8);
+	      	z-index:100;
+	      	height:300px;
+	      	position: absolute;
+	      	bottom:-350px;
+	      	width:100%;
+	      	padding-bottom:60px;
+	      	color:white;
+	      	 overflow: auto;
+	      	 box-shadow: 4px 0px 8px 0 rgba(0,0,0,0.4);
+	      }
+	      .bottom-sheet-dismiss{
+	      	position:absolute;
+	      	right:20px;
+	      	top:10px;
+	      	font-size:2em;
+	      	color:#6f6f6f;
+	      }
+	      .bottom-sheet-dismiss:hover{
+	      	color:white;
+	      	cursor:pointer;
+	      }
+	      .bottom-sheet .bottom-sheet-text{
+	      	padding-right:5%;
+	      	padding-left:5%;
+
+	      }
+	      #zoom-control{
+	      	position:absolute;
+	      	top:10px;
+	      	left:50%;
+	      }
+    </style>
+    	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+
+
+</head>
+<body>
+		<div id="map"></div>
+		<input id="zoom-control" type="range" value='10' min='0' max='20' style="Display:none"/>
+		<div class="bottom-sheet"  id="tripDescription">
+			<div class="bottom-sheet-dismiss" id="hideBottomSheet">
+				<span>&times;</span>
+			</div>
+			<div class="bottom-sheet-text">
+				<h1 id="title">Dummy</h1>
+				<p id="output">Dum</p>
+			</div>
+		</div>
+
+		<nav class="bottom-nav" style="">
+			<ul>
+				<li><a href="#" class="active"><span class="fa fa-map"></span></a></li>
+				
+				<li><a href="./index.html" class=""><span class="fa fa-list"></span></a></li>
+				<li><a href="./favorites.html" class=""><span class="fa fa-heart-o"></span></a></li>
+			</ul>
+		
+		</nav>
+		<!--Including data-->
+		<script type="text/javascript" src="idListOfTrips.json"></script>
+		<script type="text/javascript" src="imageListOfTrips.json"></script>
+		<script type="text/javascript" src="shortListOfTrips.json"></script>
+		<script type="text/javascript">
+			var toDelete = {};
+
+			var output = document.getElementById('output');
+			var title = document.getElementById('title');
+			var bottomSheet = document.getElementById('tripDescription');
+
+		  	var map;
+		  	var hideBottomSheetButton = document.getElementById('hideBottomSheet');
+
+		  	var zoomCtrl = document.getElementById('zoom-control');
+		  	 var lastClickedFeature;
+		  	var bottomSheetIsVisible = false;
+	
+	      function initMap() {
+	        map = new google.maps.Map(document.getElementById('map'), {
+	          	center: {lat: 62.782986, lng: 9.608227},
+	          	zoom: 10, 
+	        	mapTypeId: 'terrain',
+	        	zoomControl: false,
+	        	scaleControl: true,
+  				streetViewControl: false
+	        });
+	        map.data.setStyle({
+			  	strokeColor: 'red',
+			  	strokeWeight: 3
+			});
+
+		
+	        
+	       displayTripsInMap();
+	      }
+	      function displayTripsInMap(){
+	 
+	      		for(i = 1; i<tripsArray.length; i++){
+
+					var shortTrip = tripsArray[i];
+
+					var singleTrip = completeTrips[shortTrip._id];
+					var geoson = {};
+					geoson.type="FeatureCollection";
+					geoson.features = [];
+					var feature = {};
+					feature.type = "Feature";
+					feature.geometry = singleTrip.geojson;
+					feature.properties = {};
+					feature.properties.name = singleTrip.navn;
+					feature.properties.description = singleTrip.beskrivelse;
+					//feature.properties = descriptionProperty;
+
+					console.log(JSON.stringify(singleTrip._id));
+					geoson.features.push(feature);
+					
+		      		console.log(JSON.stringify(geoson));
+					map.data.addGeoJson(geoson);
+					map.data.addListener('click', function(event) {
+						onClickTrip(event);
+
+					});
+
+				}
+				zoomCtrl.onchange = function() {
+					console.log("zooming to :" + zoomCtrl.value);
+					 map.zoomTo(zoomCtrl.value);
+				}
+
+				hideBottomSheetButton.onclick = function(){animateDownBottomSheet(bottomSheet,0)};
+
+		    
+	      }
+	      function onClickTrip(event){
+	      	   
+  				output.innerHTML = event.feature.getProperty('description');
+				title.innerHTML = event.feature.getProperty('name');
+				console.log("Change color of old to red");
+				map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
+				lastClickedFeature = event.feature;
+	  			map.data.overrideStyle(event.feature, {strokeColor: 'black'});
+	  			if(!bottomSheetIsVisible){
+	  				animateUpBottom(bottomSheet,-300);
+	  			}
+	      }
+	   
+	      function animateUpBottom(obj, from){
+			  if(from > 0){  
+			  	bottomSheetIsVisible = true;
+	       		return;  
+			   }
+			   else {
+			       obj.style.bottom = from + "px";
+			       setTimeout(function(){
+			           animateUpBottom(obj, from + 3);
+			       }, 1) 
+			   }
+			   
+			}
+			function animateDownBottomSheet(obj, from){
+			  if(from < -300){  
+			  	bottomSheetIsVisible = false; 
+			       return;  
+			   }
+			   else {
+			   	console.log(from);
+			       obj.style.bottom = from + "px";
+			       setTimeout(function(){
+			           animateDownBottomSheet(obj, from - 3);
+			       }, 3) 
+			   }
+			   
+			}
+
+		</script>
+		<script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyDz1brUV7gJ35opKvQ9ls0n08a14eOXZP8&callback=initMap"
+    async defer></script>
+
+</body>

@@ -1,0 +1,70 @@
+var months = JSON.parse('
+{
+	{"1":{
+		"title":"Januar",
+		"shortTitle":"Jan"
+		}
+	},
+	{"2":{
+		"title":"Februar",
+		"shortTitle":"Feb"
+		}
+	},
+	{"3":{
+		"title":"Mars",
+		"shortTitle":"Mar"
+		}
+	},
+	{"4":{
+		"title":"April",
+		"shortTitle":"Apr"
+		}
+	},
+	{"5":{
+		"title":"Mai",
+		"shortTitle":"Mai"
+		}
+	},
+	{"6":{
+		"title":"Juni",
+		"shortTitle":"Jun"
+		}
+	},
+	{"7":{
+		"title":"Juli",
+		"shortTitle":"Jul"
+		}
+	},
+	{"8":{
+		"title":"August",
+		"shortTitle":"Aug"
+		}
+	},
+	{"9":{
+		"title":"September",
+		"shortTitle":"Sept"
+		}
+	},
+	{"10":{
+		"title":"Oktober",
+		"shortTitle":"Okt"
+		}
+	},
+	{"11":{
+		"title":"November",
+		"shortTitle":"Nov"
+		}
+	},
+	{"12":{
+		"title":"Desember",
+		"shortTitle":"Des"
+		}
+	}
+})';
+
+function monthToString(monthNumber){
+	months.monthNumber.title;
+}
+function monthToShortString(monthNumber){
+	months.monthNumber.shortTitle;
+}

@@ -1,0 +1,229 @@
+<html>
+	<head>
+		<link href="https://fonts.googleapis.com/css?family=Roboto:100,300,500" rel="stylesheet" />
+
+		<style>
+		 	body{
+		 		font-family: 'Roboto', sans-serif;
+				font-weight: 500;
+				background:#f6f6f6;
+		 	}
+		 	.imageContainer{  
+				position: relative; 
+				border-radius:8px;
+				margin-left:2%;
+				margin-bottom:10px;
+				margin-right:2%;
+				 
+		 	}
+		 	.imageName{
+		 		position:relative;
+		 		z-index: 100;
+				position: absolute;
+				color: white;
+				font-size: 30px;
+				font-weight: bold;
+			
+
+		 	}
+			.code{
+				background:#f6f6f6;
+				border-style:solid;
+				border-width:1px;
+				border-color:gray;
+				border-radius:10px;
+				padding:20px;
+			}
+			img{
+				  position: absolute;
+				  left: 0;
+				  top: 0;
+				border-radius:8px;
+				background-color:white; 
+				box-shadow:  4px 4px 8px 0 rgba(0,0,0,0.2);
+			}
+		</style>
+	</head>
+	<body>
+		<h1>Shortlist of Trips</h1>	
+		<pre class="code" id="jsonOutput"></pre>
+		<h1>Id List of trips</h1>
+		<pre class="code"  id="validTripsAndImg"></pre>
+		<h1>List of Images</h1>
+		<pre class="code" id="imageListDiv"></pre>
+
+		<script>
+			var baseUrl = 'https://api.nasjonalturbase.no/';
+			var nerskogenTurer = 'turer?kommuner=Rennebu&limit=50&skip=';
+			var apiKeyParameter = 'api_key=2cdbb70547fcfae8d09c54dd976bf19cb3921bb2';
+
+
+			var outputDiv = document.getElementById('jsonOutput');
+			var validTripDiv = document.getElementById('validTripsAndImg');
+			var imageListDiv = document.getElementById('imageListDiv');
+
+			var result = [];
+			var skip = 0;
+			var trips = [];
+			var tripsMap = {};
+			var arrayOfTrips = [];
+			var imagesMap = {};
+
+
+			function sendCORSRequest(request, callback){
+              if ( request ){
+                // Define a callback function
+                request.onload = function(){      
+                };      
+                request.onreadystatechange = 
+             function() {
+                    if (this.readyState == 4 && this.status == 200) {
+                    	callback(request);
+                    }
+
+                };
+                request.ontimeout = function(){
+                   alert("timeout");
+                }
+                request.onerror=function(){
+                  alert(error);
+                  document.getElementById('responseText').innerHTML = request.status;
+     
+                }
+                request.send();
+         
+            }else{
+                alert('CORS not supported');
+                return;
+            }
+          }
+
+        function createCORSRequest(method, url){
+         var xhr = new XMLHttpRequest();
+          if ("withCredentials" in xhr) {
+            // XHR for Chrome/Firefox/Opera/Safari.
+            xhr.open(method, url, true);
+          } else if (typeof XDomainRequest != "undefined") {
+            // XDomainRequest for IE.
+            xhr = new XDomainRequest();
+            xhr.open(method, url);
+          } else {
+            // CORS not supported.
+            alert("CORS not supported");
+            xhr = null;
+          }
+          return xhr;
+        }
+
+
+
+			function scrapeTurbase(){
+				fetchListOfTrips();
+				skip = 50;
+				fetchListOfTrips();
+
+			}
+
+			function fetchListOfTrips(){
+				// Sending a receiving data in JSON format using GET method
+				var url = baseUrl+nerskogenTurer+skip;//+'&'+apiKeyParameter;
+				var request = createCORSRequest( 'get', url );
+				request.setRequestHeader("Content-type", "application/JSON");
+				sendCORSRequest(request,onTripListReady);
+			}
+			function onTripListReady(request){
+				    var response = JSON.parse(request.responseText);
+				    alert(JSON.stringify(response));
+				    result = result.concat(response.documents);
+                    outputDiv.innerHTML = JSON.stringify(result);
+                    result.forEach( function(trip) { 
+					     var id = trip._id;
+					     getOneTrip(id);
+
+					} );
+			}
+
+			function getOneTrip(id){
+				var url = baseUrl+'turer/'+id ;//+ '?' + apiKeyParameter;
+
+				var xhr = new createCORSRequest('get',url);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.onreadystatechange = function () { 
+				    if (xhr.readyState == 4 && xhr.status == 200) {
+				    	var trip = JSON.parse(xhr.responseText);
+				    	
+				        trips.push(trip);
+
+				        tripsMap[trip._id] = trip;
+				        validTripsAndImg.innerHTML = JSON.stringify(tripsMap);
+
+
+				        trip.bilder.forEach(function(bilde){
+
+				        	getOneBilde(trip._id,bilde);
+				        });
+
+
+				    }
+				};
+				xhr.send();
+
+			}
+
+			function getOneBilde(tripId,bilde){
+				var url = baseUrl+'bilder/'+bilde ;//+ '?' + apiKeyParameter;
+
+				var xhr = new createCORSRequest('get',url);
+				xhr.setRequestHeader("Content-type", "application/json");
+				xhr.onreadystatechange = function () { 
+				    if (xhr.readyState == 4 && xhr.status == 200) {
+				    	var image = JSON.parse(xhr.responseText);
+				    	tripsMap[tripId].bilder.push(image);
+
+				    	arrayOfTrips.push(tripsMap[tripId]);
+				        
+				        imagesMap[image._id] = image;
+
+				        imageListDiv.innerHTML = JSON.stringify(imagesMap);
+				    	
+				    	addImageElement(image.img[2],image.navngiving,tripsMap[tripId].navn);
+				    	
+				    	validTripsAndImg.innerHTML = JSON.stringify(tripsMap);
+				    	console.log(JSON.stringify(tripsMap));
+				    }
+				};
+				xhr.send();
+
+			}
+			function listTrip(trip){
+
+
+			}
+
+			function addImageElement(image,navn, tripsTitle){
+				var img = document.createElement("img");
+				var outerDiv = document.createElement("div");
+				outerDiv.className = 'imageContainer';
+				img.setAttribute('src', image.url);
+				img.setAttribute('alt', navn);
+				img.setAttribute('height', image.height);
+			//	img.setAttribute('width', '1px');
+				var imageText = document.createElement("div");
+				outerDiv.style.height = image.height;
+				outerDiv.style.width = image.width;
+				imageText.className = 'imageName';
+				imageText.innerHTML = tripsTitle;
+				imageText.style.left = '50px';
+				imageText.style.top = image.height/2;
+				outerDiv.appendChild(img);
+				outerDiv.appendChild(imageText);
+				document.body.appendChild(outerDiv);
+			}
+
+
+			document.onload = scrapeTurbase();
+
+
+		</script>
+	</body>
+</html>

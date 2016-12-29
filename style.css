@@ -1,0 +1,178 @@
+		 	body{
+		 		font-family: 'Roboto', sans-serif;
+				font-weight: 500;
+				background:#f6f6f6;
+		 	}
+		 	.container{
+		 		padding-bottom:80px;
+		 	}
+		 	.card{
+		 		border-style:none;
+		 		box-shadow:  4px 4px 8px 0 rgba(0,0,0,0.4);
+
+		 	}
+		 	.card:hover{
+		 		cursor:pointer;
+		 	}
+		 	.card-title{
+				font-weight: bold;
+
+				
+		 	}
+		 	.favorite{
+		 		color:red;
+		 	}
+
+		 	.card-img-overlay{
+		 		border-radius:3px;
+		 	}
+		 	.card-block{
+		 		min-height:230px;
+		 	}
+		 	.card-img-overlay:hover{
+		 		  -webkit-animation-name: overlayAnim;
+			    -webkit-animation-duration: 0.4s;
+			    animation-name: overlayAnim;
+			    animation-duration: 0.4s;
+			    background: rgba(0, 0, 0, 0.3);
+			    
+		 	}
+		 	/* Add Animation */
+			@-webkit-keyframes overlayAnim {
+				from {opacity: 0;} 
+			    to {opacity: 1;}
+			}
+
+			@keyframes overlayAnim {
+			   from {opacity: 0;} 
+			    to {opacity: 1;}
+			}
+
+		 	.card .card-img{
+			  width:100%;
+
+			  height:auto;
+			  border-bottom-right-radius: 0px;
+			  border-bottom-left-radius: 0px;
+
+			}
+			.card-title{
+				margin-top:20px;
+				text-align:center;
+			}
+
+			nav{
+				position:fixed;
+				display:block;
+				width:100%;
+				background: #fff;
+				z-index:200;
+				box-shadow: 4px 0px 8px 0 rgba(0,0,0,0.4);
+				
+				text-align:center;
+				padding-top:5px;
+				padding-bottom:5px;
+
+			}
+			.bottom-nav{
+				bottom:0; 
+			}
+
+			/* Always set the map height explicitly to define the size of the div
+	       	* element that contains the map. */
+	      	#map {
+	        	height:100%;
+	      	}
+	      	.bottom-nav ul {
+			    list-style-type: none;
+			    margin: 0;
+			    padding: 0;
+			    overflow: hidden;
+
+			}
+
+			.bottom-nav li {
+			    text-align: center;
+			}
+			.bottom-nav a{
+				 color:#6c6c6c;
+				 font-size:2em;
+			}
+
+			.bottom-nav li  {
+				display: inline-block;
+				  width:30%;
+				  float:center;
+			}
+			.bottom-nav .active{
+				color:	#ff6060;
+			}
+			.title{
+				text-align:center;
+				padding-top:40px;
+				padding-bottom:40px;
+				color:	#ff6060;
+			}
+			.iconContainer img{
+				background:white;
+				margin-left:3px;
+				border-top-left-radius: 24px;
+				border-top-right-radius: 24px;
+				
+				border-style:solid;
+				border-color:white;
+
+				
+			}
+			.iconContainer{
+				margin-top: -44px;
+				margin-right:-10px;
+			}
+			.trip-fact{
+				width:33%; 
+				display: inline-block;
+				text-align:center;
+			}
+			.fact-container{
+			    position: absolute;
+				margin-bottom:20px;
+			    width:100%;
+			  
+			}
+				 	/*.imageContainer{
+		 		position: relative; 
+				margin-left:2%;
+				margin-bottom:10px;
+				margin-right:2%;
+				display: block;
+   				background: rgba(0, 0, 0, .9); 
+
+		 	}
+
+			.overlay{
+				z-index: 99;
+		 		width:100%;
+		 		height:100%;
+				position: absolute;
+				background: rgba(0, 0, 0, .4);
+			}
+		 	.imageName{
+		 		z-index: 100;
+		 		width:100%;
+				position: absolute;
+				color: white;
+				font-size: 2em;
+				font-weight: bold;
+				text-align:center;
+		 	}
+
+			img{
+				position: absolute;
+				left: 0;
+				top: 0;
+				background-color:white; 
+				box-shadow:  4px 4px 8px 0 rgba(0,0,0,0.4);
+			}
+			.overlay, img,.imageContainer{
+				border-radius:4px;
+			}*/

@@ -1,0 +1,35 @@
+<html>
+	<head>
+	</head>
+	<body>
+		<script type="text/javascript" src="idListOfTrips.json"></script>
+		<script type="text/javascript" src="imageListOfTrips.json"></script>
+		<script type="text/javascript" src="shortListOfTrips.json"></script>
+		<script type="text/javascript" src="tripsToDelete.json"></script>
+		<script type="text/javascript">
+			function deleteTrips(){
+				tripsToDelete.forEach(function(tripId){
+					console.log('Deleting: '+tripId);
+					deleteFromIdList(tripId);
+					deleteFromShortList(tripId)
+				});
+				console.log('id list:' + JSON.stringify(completeTrips));
+				console.log('short list:' + JSON.stringify(tripsArray));
+			}
+			function deleteFromIdList(tripId){
+				delete completeTrips.tripId;
+
+			}
+
+			function deleteFromShortList(tripId){
+				var indexOfTrip = tripsArray.indexOf(tripId);
+				if(indexOfTrip!=-1){
+					tripsArray.splice(indexOfTrip,1);
+				}
+			}
+			document.onload = deleteTrips();
+		</script>
+
+
+	</body>
+</html>
