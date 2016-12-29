@@ -141,7 +141,8 @@
 			}
 			.fact-container{
 			    position: absolute;
-				margin-bottom:20px;
+			    bottom:20px;
+				margin-bottom:10px;
 			    width:100%;
 			  
 			}
