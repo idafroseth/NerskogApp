@@ -46,10 +46,7 @@
     font-size: 28px;
     font-weight: bold;
 }
-.fact-container{
-    position: absolute;
-    bottom: 0;
-}
+
 .close:hover,
 .close:focus {
     color: #000;

@@ -22,6 +22,10 @@
 		 	.favorite{
 		 		color:red;
 		 	}
+		 	.favo{
+		 		width:100%;
+		 		text-align:center;
+		 	}
 
 		 	.card-img-overlay{
 		 		border-radius:3px;
@@ -92,6 +96,7 @@
 			}
 
 			.bottom-nav li {
+				padding:4px 0;
 			    text-align: center;
 			}
 			.bottom-nav a{
@@ -105,6 +110,7 @@
 				  float:center;
 			}
 			.bottom-nav .active{
+
 				color:	#ff6060;
 			}
 			.title{

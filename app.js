@@ -148,7 +148,6 @@
 				}
 				favoriteIcon.style="display:block; padding:10px;";
 				favoriteIcon.setAttribute('align','center');
-
 				return favoriteIcon;
 				
 				
