@@ -1,19 +1,25 @@
 			var pageNumber = 0;
 			var itemsOnPage = 10;
 			var cardDrawn = 0;
+			var lastItem = itemsOnPage;
 			var row = document.createElement('div');
 
 			function printItems(){
-				for(i = pageNumber*itemsOnPage; i<tripsArray.length; i++){
+
+				lastItem = (pageNumber+1)*itemsOnPage;
+				if(lastItem > tripsArray.length){
+					document.getElementById('loader').style.display='none';
+					lastItem = tripsArray.length;
+				}
+				for(i = pageNumber*itemsOnPage; i<lastItem; i++){
 					var trip = tripsArray[i];
 					addItemToBody(completeTrips[trip._id]);
 				
 				}
-				addFavoriteEventListener();
+				pageNumber++;
 				addCardEventListener();
-
-
-
+				addFavoriteEventListener();
+				
 			}
 
 
@@ -78,7 +84,7 @@
 				var difficultFact = tripFact.cloneNode("true"); 
 				var timeEstimateFact = tripFact.cloneNode("true");
 				factContainer.className = "fact-container";
-				distanceFact.innerHTML = '<span class="text-muted">Distanse</span><br/>'+trip.distanse + 'm';
+				distanceFact.innerHTML = '<span class="text-muted">Distanse</span><br/>'+getDistanceString(trip.distanse);
 				difficultFact.innerHTML = '<span class="text-muted">Gradering</span><br/>'+trip.gradering;
 				timeEstimateFact.innerHTML =  '<span class="text-muted">Tidsbruk</span><br/>'+createTimeEstimateString(trip);
 				factContainer.appendChild(distanceFact);
@@ -87,6 +93,12 @@
 				return factContainer;
 
 
+			}
+			function getDistanceString(distance){
+				if(distance > 1000){
+					return  (distance/1000 ).toFixed(1) + ' km';
+				}
+				return distance + 'm';
 			}
 
 			function createTimeEstimateString(trip){
@@ -216,16 +228,11 @@
 
 			function addCardEventListener(){
 				var cards = document.getElementsByClassName("card");
-
-			
 				for (var i = 0; i < cards.length; i++) {
 						var onClickCard = function() {
 							displayTripModal(this.id);
-					
 						}
-
 				    cards[i].onclick = onClickCard;
-				    
 				}
 			}
 			function addFavoriteEventListener(){
@@ -233,12 +240,9 @@
 				for (var i = 0; i < favorites.length; i++) {
 						var onClickFavorite = function() {
 							alert("ClikcedFavoirte");
-					
 						}
-				    favorites[i].onclick = onClickFavorite;
-				    
+				    favorites[i].onclick = onClickFavorite; 
 				}
-
 			}
 
 			function displayTripModal(tripId){
@@ -249,4 +253,18 @@
 				modal.style.display = "block";
 			}
 
+			function hideMoreButton(){
+
+			}
+
 			document.onLoad = printItems();
+			window.onscroll = function(ev) {
+			    if ((window.innerHeight + window.scrollY) >= document.body.offsetHeight) {
+			    	if(lastItem < tripsArray.length){
+			        	printItems();
+			    	}
+			    }
+			};
+
+
+
