@@ -5,20 +5,21 @@
 			var row = document.createElement('div');
 
 			function printItems(){
+				if(tripsArray){
+					lastItem = (pageNumber+1)*itemsOnPage;
+					if(lastItem > tripsArray.length){
+						document.getElementById('loader').style.display='none';
+						lastItem = tripsArray.length;
+					}
+					for(i = pageNumber*itemsOnPage; i<lastItem; i++){
+						var trip = tripsArray[i];
+						addItemToBody(completeTrips[trip._id]);
 
-				lastItem = (pageNumber+1)*itemsOnPage;
-				if(lastItem > tripsArray.length){
-					document.getElementById('loader').style.display='none';
-					lastItem = tripsArray.length;
+					}
+					pageNumber++;
+					addCardEventListener();
+					addFavoriteEventListener();
 				}
-				for(i = pageNumber*itemsOnPage; i<lastItem; i++){
-					var trip = tripsArray[i];
-					addItemToBody(completeTrips[trip._id]);
-				
-				}
-				pageNumber++;
-				addCardEventListener();
-				addFavoriteEventListener();
 				
 			}
 
