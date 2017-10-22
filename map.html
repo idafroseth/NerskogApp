@@ -152,8 +152,10 @@
 					feature.type = "Feature";
 					feature.geometry = singleTrip.geojson;
 					feature.properties = {};
+					feature.properties.name = singleTrip._id;
 					feature.properties.name = singleTrip.navn;
 					feature.properties.description = singleTrip.beskrivelse;
+					feature.properties.lisence = singleTrip.lisens;
 					//feature.properties = descriptionProperty;
 
 					console.log(JSON.stringify(singleTrip._id));
@@ -179,7 +181,7 @@
 	      function onClickTrip(event){
 	      	   	document.getElementById("my-modal-title").innerHTML =  event.feature.getProperty('name');
 			document.getElementById("my-modal-body").innerHTML = event.feature.getProperty('description');
-			document.getElementById("my-modal-trip-license").innerHTML = tripToDisplay.navngiving;
+			document.getElementById("my-modal-trip-license").innerHTML = event.feature.getProperty('lisence');
 			modal.style.display = "block";
 			
 		      	map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
