@@ -101,7 +101,7 @@
 			</ul>
 		
 		</nav>
-		<script type="text/javascript" src="./assets/app.js"></script>
+
 		<!--Including data-->
 		<script type="text/javascript" src="./data/idListOfTrips.json"></script>
 		<script type="text/javascript" src="./data/imageListOfTrips.json"></script>
@@ -177,8 +177,12 @@
 		    
 	      }
 	      function onClickTrip(event){
-	      	   	displayTripModal(event.feature.getProperty('id'));
-			map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
+	      	   	document.getElementById("my-modal-title").innerHTML =  event.feature.getProperty('name');
+			document.getElementById("my-modal-body").innerHTML = event.feature.getProperty('description');
+			document.getElementById("my-modal-trip-license").innerHTML = tripToDisplay.navngiving;
+			modal.style.display = "block";
+			
+		      	map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
 			lastClickedFeature = event.feature;
 	  		map.data.overrideStyle(event.feature, {strokeColor: 'black'});
   				/*output.innerHTML = event.feature.getProperty('description');
