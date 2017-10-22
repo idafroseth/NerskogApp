@@ -54,11 +54,32 @@
 	      	left:50%;
 	      }
     </style>
-    	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="./assets/modal.css"/>
 
 
 </head>
 <body>
+		<!-- Trip modal -->
+		<div id="tripModal" class="my-modal">
+
+		  <!-- Modal content -->
+		  <div class="my-modal-content">
+		    <div class="my-modal-header">
+		      <span class="close">&times;</span>
+		      <h2 id="my-modal-title">Trip</h2>
+		    </div>
+		    <div class="my-modal-body">
+		    	<span class="text-muted">Beskrivelse</span>
+		    	<div id="my-modal-body"></div>
+		    	
+		    </div>
+		    <div class="my-modal-footer">
+		    	<div class="text-muted text-small" id="my-modal-trip-license"></div>
+		    </div>
+		  </div>
+
+		</div>
 		<div id="map"></div>
 		<input id="zoom-control" type="range" value='10' min='0' max='20' style="Display:none"/>
 		<div class="bottom-sheet"  id="tripDescription">
@@ -156,7 +177,10 @@
 		    
 	      }
 	      function onClickTrip(event){
-	      	   	displayTripModal();
+	      	   	displayTripModal(event.feature.getProperty('id));
+			map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
+			lastClickedFeature = event.feature;
+	  		map.data.overrideStyle(event.feature, {strokeColor: 'black'});
   				/*output.innerHTML = event.feature.getProperty('description');
 				title.innerHTML = event.feature.getProperty('name');
 				console.log("Change color of old to red");
