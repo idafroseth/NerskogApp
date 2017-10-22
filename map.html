@@ -177,7 +177,7 @@
 		    
 	      }
 	      function onClickTrip(event){
-	      	   	displayTripModal(event.feature.getProperty('id));
+	      	   	displayTripModal(event.feature.getProperty('id'));
 			map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
 			lastClickedFeature = event.feature;
 	  		map.data.overrideStyle(event.feature, {strokeColor: 'black'});
