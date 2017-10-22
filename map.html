@@ -80,6 +80,7 @@
 			</ul>
 		
 		</nav>
+		<script type="text/javascript" src="./assets/app.js"></script>
 		<!--Including data-->
 		<script type="text/javascript" src="./data/idListOfTrips.json"></script>
 		<script type="text/javascript" src="./data/imageListOfTrips.json"></script>
@@ -155,8 +156,8 @@
 		    
 	      }
 	      function onClickTrip(event){
-	      	   
-  				output.innerHTML = event.feature.getProperty('description');
+	      	   	displayTripModal();
+  				/*output.innerHTML = event.feature.getProperty('description');
 				title.innerHTML = event.feature.getProperty('name');
 				console.log("Change color of old to red");
 				map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
@@ -164,7 +165,7 @@
 	  			map.data.overrideStyle(event.feature, {strokeColor: 'black'});
 	  			if(!bottomSheetIsVisible){
 	  				animateUpBottom(bottomSheet,-300);
-	  			}
+	  			}*/
 	      }
 	   
 	      function animateUpBottom(obj, from){
