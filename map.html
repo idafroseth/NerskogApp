@@ -54,11 +54,32 @@
 	      	left:50%;
 	      }
     </style>
-    	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css">
+    	<link rel="stylesheet" href="font-awesome-4.7.0/css/font-awesome.min.css"/>
+	<link rel="stylesheet" href="./assets/modal.css"/>
 
 
 </head>
 <body>
+		<!-- Trip modal -->
+		<div id="tripModal" class="my-modal">
+
+		  <!-- Modal content -->
+		  <div class="my-modal-content">
+		    <div class="my-modal-header">
+		      <span class="close">&times;</span>
+		      <h2 id="my-modal-title">Trip</h2>
+		    </div>
+		    <div class="my-modal-body">
+		    	<span class="text-muted">Beskrivelse</span>
+		    	<div id="my-modal-body"></div>
+		    	
+		    </div>
+		    <div class="my-modal-footer">
+		    	<div class="text-muted text-small" id="my-modal-trip-license"></div>
+		    </div>
+		  </div>
+
+		</div>
 		<div id="map"></div>
 		<input id="zoom-control" type="range" value='10' min='0' max='20' style="Display:none"/>
 		<div class="bottom-sheet"  id="tripDescription">
@@ -80,41 +101,64 @@
 			</ul>
 		
 		</nav>
+
 		<!--Including data-->
 		<script type="text/javascript" src="./data/idListOfTrips.json"></script>
 		<script type="text/javascript" src="./data/imageListOfTrips.json"></script>
 		<script type="text/javascript" src="./data/shortListOfTrips.json"></script>
 		<script type="text/javascript">
-			var toDelete = {};
 
-			var output = document.getElementById('output');
-			var title = document.getElementById('title');
-			var bottomSheet = document.getElementById('tripDescription');
+		// Get the modal
+		var modal = document.getElementById('tripModal');
 
-		  	var map;
-		  	var hideBottomSheetButton = document.getElementById('hideBottomSheet');
+		// Get the button that opens the modal
+		var btn = document.getElementById("myBtn");
 
-		  	var zoomCtrl = document.getElementById('zoom-control');
-		  	 var lastClickedFeature;
-		  	var bottomSheetIsVisible = false;
+		// Get the <span> element that closes the modal
+		var span = document.getElementsByClassName("close")[0];
+
+		// When the user clicks on <span> (x), close the modal
+		span.onclick = function() {
+		    modal.style.display = "none";
+		}
+
+		// When the user clicks anywhere outside of the modal, close it
+		window.onclick = function(event) {
+		    if (event.target == modal) {
+			modal.style.display = "none";
+		    }
+		}
+
+		var toDelete = {};
+
+		var output = document.getElementById('output');
+		var title = document.getElementById('title');
+		var bottomSheet = document.getElementById('tripDescription');
+
+		var map;
+		var hideBottomSheetButton = document.getElementById('hideBottomSheet');
+
+		var zoomCtrl = document.getElementById('zoom-control');
+		var lastClickedFeature;
+		var bottomSheetIsVisible = false;
 	
 	      function initMap() {
-	        map = new google.maps.Map(document.getElementById('map'), {
-	          	center: {lat: 62.782986, lng: 9.608227},
-	          	zoom: 10, 
-	        	mapTypeId: 'terrain',
-	        	zoomControl: false,
-	        	scaleControl: true,
-  				streetViewControl: false
-	        });
-	        map.data.setStyle({
-			  	strokeColor: 'red',
-			  	strokeWeight: 3
+			map = new google.maps.Map(document.getElementById('map'), {
+				center: {lat: 62.782986, lng: 9.608227},
+				zoom: 10, 
+				mapTypeId: 'terrain',
+				zoomControl: false,
+				scaleControl: true,
+					streetViewControl: false
 			});
+			map.data.setStyle({
+					strokeColor: 'red',
+					strokeWeight: 3
+				});
 
-		
-	        
-	       displayTripsInMap();
+
+
+		       displayTripsInMap();
 	      }
 	      function displayTripsInMap(){
 	 
@@ -130,8 +174,10 @@
 					feature.type = "Feature";
 					feature.geometry = singleTrip.geojson;
 					feature.properties = {};
+					feature.properties.name = singleTrip._id;
 					feature.properties.name = singleTrip.navn;
 					feature.properties.description = singleTrip.beskrivelse;
+					feature.properties.lisence = singleTrip.lisens;
 					//feature.properties = descriptionProperty;
 
 					console.log(JSON.stringify(singleTrip._id));
@@ -155,8 +201,15 @@
 		    
 	      }
 	      function onClickTrip(event){
-	      	   
-  				output.innerHTML = event.feature.getProperty('description');
+	      	   	document.getElementById("my-modal-title").innerHTML =  event.feature.getProperty('name');
+			document.getElementById("my-modal-body").innerHTML = event.feature.getProperty('description');
+			document.getElementById("my-modal-trip-license").innerHTML = event.feature.getProperty('lisence');
+			modal.style.display = "block";
+			
+		      	map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
+			lastClickedFeature = event.feature;
+	  		map.data.overrideStyle(event.feature, {strokeColor: 'black'});
+  				/*output.innerHTML = event.feature.getProperty('description');
 				title.innerHTML = event.feature.getProperty('name');
 				console.log("Change color of old to red");
 				map.data.overrideStyle(lastClickedFeature, {strokeColor: 'red'});
@@ -164,7 +217,7 @@
 	  			map.data.overrideStyle(event.feature, {strokeColor: 'black'});
 	  			if(!bottomSheetIsVisible){
 	  				animateUpBottom(bottomSheet,-300);
-	  			}
+	  			}*/
 	      }
 	   
 	      function animateUpBottom(obj, from){
